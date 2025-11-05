@@ -5,13 +5,60 @@ export default function Facebook() {
   const [openIndex, setOpenIndex] = useState(null);
 
   const [link, setLink] = useState("");
+  const [numWinners, setNumWinners] = useState(1);
+  const [winners, setWinners] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleFetch = (e) => {
+  // Toggle FAQ
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  // Validate and fetch from backend, then set winners
+  const handleFetch = async (e) => {
     e.preventDefault();
+
     if (link.trim() === "") {
       alert("Please enter a Facebook post link");
-    } else {
-      alert(`Fetching data for: ${link}`);
+      return;
+    }
+
+    const count = parseInt(numWinners, 10);
+    if (Number.isNaN(count) || count <= 0) {
+      alert("Please enter a valid number of winners (1 or more)");
+      return;
+    }
+
+    setLoading(true);
+    setWinners([]);
+
+    try {
+      // Build query string for GET request
+      const params = new URLSearchParams({
+        postUrl: link,
+        winners: count,
+      });
+
+      const res = await fetch(
+        `http://localhost:5000/api/facebook/comments?${params}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `Server responded with ${res.status}`);
+      }
+
+      const data = await res.json();
+      // Expect backend to return { platform, postUrl, winners: [...] }
+      setWinners(Array.isArray(data.winners) ? data.winners : []);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      alert("Error fetching data. Check backend or the link and try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,10 +85,6 @@ export default function Facebook() {
     },
   ];
 
-  const toggleFAQ = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
-
   return (
     <div className="min-h-screen bg-[#eef2f3] flex flex-col items-center justify-center p-6">
       {/* NavBar*/}
@@ -66,22 +109,60 @@ export default function Facebook() {
       {/* Input Section */}
       <form
         onSubmit={handleFetch}
-        className="flex w-full max-w-2xl bg-white rounded-md overflow-hidden shadow-md border border-gray-200"
+        className="flex flex-col sm:flex-row w-full max-w-2xl bg-white rounded-md overflow-hidden shadow-md border border-gray-200 p-4 gap-3"
       >
         <input
           type="text"
           value={link}
           placeholder="Enter Facebook Link Only..."
           onChange={(e) => setLink(e.target.value)}
-          className="flex-1 px-4 py-3 outline-none text-gray-700"
+          className="flex-1 px-4 py-3 outline-none text-gray-700 border border-gray-300 rounded"
         />
+
+        <input
+          type="number"
+          value={numWinners}
+          min="1"
+          onChange={(e) => setNumWinners(e.target.value)}
+          className="w-32 px-4 py-3 border border-gray-300 rounded text-gray-700"
+          placeholder="Winners"
+        />
+
         <button
           type="submit"
-          className="bg-[#2d3e50] hover:bg-[#1c2938] text-white font-medium px-6 flex items-center space-x-2 cursor-pointer"
+          className="bg-[#2d3e50] hover:bg-[#1c2938] text-white font-medium px-6 rounded transition"
+          disabled={loading}
         >
-          Proceed
+          {loading ? "Picking..." : "Pick Winners"}
         </button>
       </form>
+
+      {/* Winners display */}
+      {winners.length > 0 && (
+        <div className="mt-6 bg-white shadow-md rounded-md p-4 w-full max-w-2xl text-center">
+          <h3 className="font-semibold mb-2">🎉 Lucky Winners 🎉</h3>
+          <ul className="text-gray-700">
+            {winners.map((w, i) => (
+              <li key={i} className="py-1">
+                {typeof w === "string" ? (
+                  w
+                ) : (
+                  // If backend returns objects e.g. { id, user, text } show nice formatting
+                  <span>
+                    <strong>
+                      {w.user ??
+                        w.username ??
+                        w.from?.name ??
+                        `Winner ${i + 1}`}
+                    </strong>
+                    {w.text ? ` — ${w.text}` : ""}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* FAQ Section */}
       <section className="w-full max-w-4xl mt-16 border-1 border-blue-400 rounded-sm">
