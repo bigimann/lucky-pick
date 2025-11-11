@@ -13,14 +13,19 @@ export default function Twitter() {
   const handleFetch = async (e) => {
     e.preventDefault();
 
+    var formError = document.getElementById("form-error");
+
     if (link.trim() === "") {
-      alert("Please enter a Twitter post link");
+      formError.style.display = "block";
+      formError.textContent = "Please enter a valid Twitter link";
       return;
     }
 
     const count = parseInt(numWinners, 10);
     if (Number.isNaN(count) || count <= 0) {
-      alert("Please enter a valid number of winners (1 or more)");
+      formError.style.display = "block";
+      formError.textContent =
+        "Please enter a valid number of winners (1 or more)";
       return;
     }
 
@@ -49,9 +54,11 @@ export default function Twitter() {
       const data = await res.json();
       // Expect backend to return { platform, postUrl, winners: [...] }
       setWinners(Array.isArray(data.winners) ? data.winners : []);
+      formError.style.display = "none";
     } catch (error) {
       console.error("Fetch error:", error);
-      alert("Error fetching data. Check backend or the link and try again.");
+      formError.style.display = "block";
+      formError.textContent = "Error fetching data. Please try again.";
     } finally {
       setLoading(false);
     }
@@ -82,7 +89,10 @@ export default function Twitter() {
 
   return (
     <div className="min-h-screen bg-[#eef2f3] flex flex-col items-center justify-center p-6">
+      {/* NavBar*/}
       <NavBar />
+
+      {/* Hero Section */}
       <section className="text-center mb-10 mt-16">
         <h1 className="text-3xl font-semibold text-gray-800">
           <span className="text-sky-500">LUCKYPICK</span>.com
@@ -95,36 +105,51 @@ export default function Twitter() {
         </p>
       </section>
 
+      {/* Form Validation Error Response */}
+      <div className="bg-white w-full max-w-4xl">
+        <p
+          id="form-error"
+          className="text-red-400 bg-slate-100 p-1.5 m-2 hidden"
+        ></p>
+      </div>
+
+      {/* Input Section */}
       <form
         onSubmit={handleFetch}
-        className="flex flex-col sm:flex-row w-full max-w-2xl bg-white rounded-md shadow-md border border-gray-200 p-4 gap-3"
+        className="flex flex-col sm:flex-row w-full max-w-4xl bg-white rounded-md shadow-md border border-gray-200 p-4 gap-3"
       >
         <input
           type="text"
           value={link}
           placeholder="Enter Twitter/X Link Only..."
           onChange={(e) => setLink(e.target.value)}
-          className="flex-1 px-4 py-3 border border-gray-300 rounded text-gray-700"
+          className="flex-1 px-4 py-2 border border-gray-300 rounded text-gray-700"
         />
-        <input
-          type="number"
-          min="1"
-          value={numWinners}
-          onChange={(e) => setNumWinners(e.target.value)}
-          className="w-32 px-4 py-3 border border-gray-300 rounded text-gray-700"
-          placeholder="Winners"
-        />
+
+        <label className="text-black flex gap-2 items-center" htmlFor="winners">
+          No. of Winners:
+          <input
+            type="number"
+            min="1"
+            value={numWinners}
+            onChange={(e) => setNumWinners(e.target.value)}
+            className="w-32 px-4 py-3 border border-gray-300 rounded text-gray-700"
+            placeholder="Winners"
+          />
+        </label>
+
         <button
           type="submit"
-          className="bg-sky-600 hover:bg-sky-700 text-white font-medium px-6 rounded transition"
+          className="bg-sky-600 hover:bg-sky-700 text-white font-medium px-6 py-2 rounded transition cursor-pointer"
           disabled={loading}
         >
           {loading ? "Picking..." : "Pick Winners"}
         </button>
       </form>
 
+      {/* Winners Display */}
       {winners.length > 0 && (
-        <div className="mt-6 bg-white shadow-md rounded-md p-4 w-full max-w-2xl text-center">
+        <div className="mt-6 bg-white shadow-md rounded-md p-4 w-full max-w-4xl text-center">
           <h3 className="font-semibold mb-2 text-sky-600">
             🎉 Lucky Winners 🎉
           </h3>
@@ -142,7 +167,7 @@ export default function Twitter() {
                         w.from?.name ??
                         `Winner ${i + 1}`}
                     </strong>
-                    {w.text ? ` — ${w.text}` : ""}
+                    {w.text ? ` - ${w.text}` : ""}
                   </span>
                 )}
               </li>
