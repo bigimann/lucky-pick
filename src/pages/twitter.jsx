@@ -66,24 +66,26 @@ export default function Twitter() {
 
   const faqs = [
     {
-      q: "What does the Twitter Giveaway Tool do?",
-      a: "It extracts comments (replies) from a public tweet and allows random selection of winners.",
+      question: "What does the Twitter Giveaway Tool do?",
+      answer:
+        "It extracts comments (replies) from a public tweet and allows random selection of winners.",
     },
     {
-      q: "Do I need to log in with my Twitter account?",
-      a: "No. LuckyPick does not require or store your credentials.",
+      question: "Do I need to log in with my Twitter account?",
+      answer: "No. LuckyPick does not require or store your credentials.",
     },
     {
-      q: "Are replies stored or shared?",
-      a: "No, data is processed temporarily to select winners.",
+      question: "Are replies stored or shared?",
+      answer: "No, data is processed temporarily to select winners.",
     },
     {
-      q: "Can I use private tweets?",
-      a: "No, only public tweets are supported.",
+      question: "Can I use private tweets?",
+      answer: "No, only public tweets are supported.",
     },
     {
-      q: "Is LuckyPick affiliated with X?",
-      a: "No. LuckyPick is independent and not affiliated with X Corp or Twitter.",
+      question: "Is LuckyPick affiliated with X?",
+      answer:
+        "No. LuckyPick is independent and not affiliated with X Corp or Twitter.",
     },
   ];
 
@@ -154,20 +156,20 @@ export default function Twitter() {
             🎉 Lucky Winners 🎉
           </h3>
           <ul className="text-gray-700">
-            {winners.map((w, i) => (
-              <li key={i} className="py-1">
-                {typeof w === "string" ? (
-                  w
+            {winners.map((winner, index) => (
+              <li key={index} className="py-1">
+                {typeof winner === "string" ? (
+                  winner
                 ) : (
                   // If backend returns objects e.g. { id, user, text } show nice formatting
                   <span>
                     <strong>
-                      {w.user ??
-                        w.username ??
-                        w.from?.name ??
-                        `Winner ${i + 1}`}
+                      {winner.user ??
+                        winner.username ??
+                        winner.from?.name ??
+                        `Winner ${index + 1}`}
                     </strong>
-                    {w.text ? ` - ${w.text}` : ""}
+                    {winner.text ? ` - ${winner.text}` : ""}
                   </span>
                 )}
               </li>
@@ -188,14 +190,14 @@ export default function Twitter() {
                 onClick={() => toggleFAQ(index)}
                 className="w-full flex justify-between items-center px-5 py-4 font-medium text-gray-800 bg-gray-300 hover:bg-gray-200 transition cursor-pointer"
               >
-                <span>{`${index + 1}. ${faq.q}`}</span>
+                <span>{`${index + 1}. ${faq.question}`}</span>
                 <span className="text-sky-600 text-xl font-bold">
                   {openIndex === index ? "-" : "+"}
                 </span>
               </button>
               {openIndex === index && (
                 <div className="px-5 py-4 text-gray-600 border-t text-sm">
-                  {faq.a}
+                  {faq.answer}
                 </div>
               )}
             </div>
@@ -214,7 +216,8 @@ export default function Twitter() {
       </section>
 
       <footer className="w-full bg-gray-100 pt-4 border-t text-center text-gray-500 text-sm">
-        © {new Date().getFullYear()} LuckyPick.com - All Rights Reserved
+        &copy; {new Date().getFullYear()} LuckyPick.com by Eneojo - All Rights
+        Reserved
       </footer>
     </div>
   );

@@ -19,8 +19,8 @@ function generateMockComments(platform) {
     "Peter Parker",
     "Natasha Romanoff",
   ];
-  return names.map((name, i) => ({
-    id: `${platform}-comment-${i}`,
+  return names.map((name, index) => ({
+    id: `${platform}-comment-${index}`,
     user: name,
     text: `This is a ${platform} comment from ${name}`,
   }));

@@ -68,24 +68,28 @@ export default function Instagram() {
 
   const faqs = [
     {
-      q: "What does the Instagram Giveaway Tool do?",
-      a: "This tool extracts comments from a public Instagram post and allows you to randomly select winners for your giveaways.",
+      question: "What does the Instagram Giveaway Tool do?",
+      answer:
+        "This tool extracts comments from a public Instagram post and allows you to randomly select winners for your giveaways.",
     },
     {
-      q: "Do I need to log in with my Instagram account?",
-      a: "No. LuckyPick does not require or store any login credentials. Simply paste the public Instagram post link to proceed.",
+      question: "Do I need to log in with my Instagram account?",
+      answer:
+        "No. LuckyPick does not require or store any login credentials. Simply paste the public Instagram post link to proceed.",
     },
     {
-      q: "Are the extracted comments stored or shared?",
-      a: "No. Comments are temporarily processed to select winners and are never stored on our servers.",
+      question: "Are the extracted comments stored or shared?",
+      answer:
+        "No. Comments are temporarily processed to select winners and are never stored on our servers.",
     },
     {
-      q: "Can I use this tool for private posts?",
-      a: "No. Only public Instagram posts can be accessed for giveaways.",
+      question: "Can I use this tool for private posts?",
+      answer: "No. Only public Instagram posts can be accessed for giveaways.",
     },
     {
-      q: "Is this tool affiliated with Instagram?",
-      a: "No. LuckyPick is an independent platform and is not connected to Instagram or Meta Platforms, Inc.",
+      question: "Is this tool affiliated with Instagram?",
+      answer:
+        "No. LuckyPick is an independent platform and is not connected to Instagram or Meta Platforms, Inc.",
     },
   ];
 
@@ -155,20 +159,20 @@ export default function Instagram() {
             🎉 Lucky Winners 🎉
           </h3>
           <ul className="text-gray-700">
-            {winners.map((w, i) => (
-              <li key={i} className="py-1">
-                {typeof w === "string" ? (
-                  w
+            {winners.map((winner, index) => (
+              <li key={index} className="py-1">
+                {typeof winner === "string" ? (
+                  winner
                 ) : (
                   // If backend returns objects e.g. { id, user, text } show nice formatting
                   <span>
                     <strong>
-                      {w.user ??
-                        w.username ??
-                        w.from?.name ??
-                        `Winner ${i + 1}`}
+                      {winner.user ??
+                        winner.username ??
+                        winner.from?.name ??
+                        `Winner ${index + 1}`}
                     </strong>
-                    {w.text ? ` - ${w.text}` : ""}
+                    {winner.text ? ` - ${winner.text}` : ""}
                   </span>
                 )}
               </li>
@@ -190,14 +194,14 @@ export default function Instagram() {
                 onClick={() => toggleFAQ(index)}
                 className="w-full flex justify-between items-center px-5 py-4 font-medium text-gray-800 bg-gray-300 hover:bg-gray-200 transition cursor-pointer"
               >
-                <span>{`${index + 1}. ${faq.q}`}</span>
+                <span>{`${index + 1}. ${faq.question}`}</span>
                 <span className="text-pink-600 text-xl font-bold">
                   {openIndex === index ? "-" : "+"}
                 </span>
               </button>
               {openIndex === index && (
                 <div className="px-5 py-4 text-gray-600 border-t text-sm">
-                  {faq.a}
+                  {faq.answer}
                 </div>
               )}
             </div>
@@ -219,7 +223,8 @@ export default function Instagram() {
       </section>
 
       <footer className="w-full bg-gray-100 pt-4 border-t text-center text-gray-500 text-sm">
-        © {new Date().getFullYear()} LuckyPick.com - All Rights Reserved
+        &copy; {new Date().getFullYear()} LuckyPick.com by Eneojo - All Rights
+        Reserved
       </footer>
     </div>
   );

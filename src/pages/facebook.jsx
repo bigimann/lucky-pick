@@ -71,24 +71,29 @@ export default function Facebook() {
 
   const faqs = [
     {
-      q: "What does the Facebook Giveaway Tool do?",
-      a: "This tool extracts comments from a public Facebook post and allows you to randomly select winners for your giveaways.",
+      question: "What does the Facebook Giveaway Tool do?",
+      answer:
+        "This tool extracts comments from a public Facebook post and allows you to randomly select winners for your giveaways.",
     },
     {
-      q: "Do I need to log in with my Facebook account?",
-      a: "No. LuckyPick does not require or store any login credentials. Simply paste the public Facebook post link to proceed.",
+      question: "Do I need to log in with my Facebook account?",
+      answer:
+        "No. LuckyPick does not require or store any login credentials. Simply paste the public Facebook post link to proceed.",
     },
     {
-      q: "Are the extracted comments stored or shared?",
-      a: "Absolutely not. Comments are processed temporarily to select winners and are never stored on our servers.",
+      question: "Are the extracted comments stored or shared?",
+      answer:
+        "Absolutely not. Comments are processed temporarily to select winners and are never stored on our servers.",
     },
     {
-      q: "Can I use this tool for private Facebook posts?",
-      a: "No. Only public Facebook posts can be used, since Facebook limits access to private content for security and privacy reasons.",
+      question: "Can I use this tool for private Facebook posts?",
+      answer:
+        "No. Only public Facebook posts can be used, since Facebook limits access to private content for security and privacy reasons.",
     },
     {
-      q: "Is this tool affiliated with Facebook?",
-      a: "No. LuckyPick is an independent platform and is not connected to Facebook, Meta, or any of its subsidiaries.",
+      question: "Is this tool affiliated with Facebook?",
+      answer:
+        "No. LuckyPick is an independent platform and is not connected to Facebook, Meta, or any of its subsidiaries.",
     },
   ];
 
@@ -160,20 +165,20 @@ export default function Facebook() {
         <div className="mt-6 bg-white shadow-md rounded-md p-4 w-full max-w-4xl text-center">
           <h3 className="font-semibold mb-2 text-black">🎉 Lucky Winners 🎉</h3>
           <ul className="text-gray-700">
-            {winners.map((w, i) => (
-              <li key={i} className="py-1">
-                {typeof w === "string" ? (
-                  w
+            {winners.map((winner, index) => (
+              <li key={index} className="py-1">
+                {typeof winner === "string" ? (
+                  winner
                 ) : (
                   // If backend returns objects e.g. { id, user, text } show nice formatting
                   <span>
                     <strong>
-                      {w.user ??
-                        w.username ??
-                        w.from?.name ??
-                        `Winner ${i + 1}`}
+                      {winner.user ??
+                        winner.username ??
+                        winner.from?.name ??
+                        `Winner ${index + 1}`}
                     </strong>
-                    {w.text ? ` - ${w.text}` : ""}
+                    {winner.text ? ` - ${winner.text}` : ""}
                   </span>
                 )}
               </li>
@@ -198,14 +203,14 @@ export default function Facebook() {
                 onClick={() => toggleFAQ(index)}
                 className="w-full flex justify-between items-center text-left px-5 py-4 font-medium text-gray-800 bg-gray-300 border-gray-300 hover:bg-gray-200 transition cursor-pointer"
               >
-                <span>{`${index + 1}. ${faq.q}`}</span>
+                <span>{`${index + 1}. ${faq.question}`}</span>
                 <span className="text-blue-600 text-xl font-bold cursor-pointer">
                   {openIndex === index ? "-" : "+"}
                 </span>
               </button>
               {openIndex === index && (
                 <div className="px-5 py-4 text-gray-600 border-t text-sm">
-                  {faq.a}
+                  {faq.answer}
                 </div>
               )}
             </div>
@@ -231,7 +236,8 @@ export default function Facebook() {
 
       {/* Footer */}
       <footer className="w-full bg-gray-100 pt-4 border-t text-center text-gray-500 text-sm">
-        © {new Date().getFullYear()} LuckyPick.com - All Rights Reserved
+        &copy; {new Date().getFullYear()} LuckyPick.com by Eneojo - All Rights
+        Reserved
       </footer>
     </div>
   );
