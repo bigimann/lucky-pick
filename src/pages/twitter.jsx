@@ -52,9 +52,14 @@ export default function Twitter() {
       }
 
       const data = await res.json();
-      // Expect backend to return { platform, postUrl, winners: [...] }
       setWinners(Array.isArray(data.winners) ? data.winners : []);
       formError.style.display = "none";
+
+      // Show message if using mock data
+      if (data.usingMockData || data.warning) {
+        formError.style.display = "block";
+        formError.textContent = "ℹ️ Using mock data, API not available";
+      }
     } catch (error) {
       console.error("Fetch error:", error);
       formError.style.display = "block";
