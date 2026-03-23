@@ -45,10 +45,10 @@ export default function Facebook() {
       });
 
       const res = await fetch(
-        `http://localhost:5000/api/facebook/comments?${params}`,
+        `https://lucky-pick-jkqa.onrender.com/api/facebook/comments?${params}`,
         {
           method: "GET",
-        }
+        },
       );
 
       if (!res.ok) {

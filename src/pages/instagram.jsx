@@ -42,10 +42,10 @@ export default function Instagram() {
       });
 
       const res = await fetch(
-        `http://localhost:5000/api/instagram/comments?${params}`,
+        `https://lucky-pick-jkqa.onrender.com/api/instagram/comments?${params}`,
         {
           method: "GET",
-        }
+        },
       );
 
       if (!res.ok) {

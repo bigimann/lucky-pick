@@ -40,10 +40,10 @@ export default function Twitter() {
       });
 
       const res = await fetch(
-        `http://localhost:5000/api/twitter/comments?${params}`,
+        `https://lucky-pick-jkqa.onrender.com/api/twitter/comments?${params}`,
         {
           method: "GET",
-        }
+        },
       );
 
       if (!res.ok) {

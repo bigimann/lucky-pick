@@ -40,10 +40,10 @@ export default function Tiktok() {
       });
 
       const res = await fetch(
-        `http://localhost:5000/api/tiktok/comments?${params}`,
+        `https://lucky-pick-jkqa.onrender.com/api/tiktok/comments?${params}`,
         {
           method: "GET",
-        }
+        },
       );
 
       if (!res.ok) {
